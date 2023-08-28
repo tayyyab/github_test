@@ -9,8 +9,8 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
     final configString = await rootBundle.loadString('lib/config.json');
     final config = json.decode(configString) as Map<String, dynamic>;
-    String _apiUrl = config['apiUrl'] as String;
+    String apiUrl = config['apiUrl'] as String;
 
-    expect(_apiUrl, "https://update-api-url.com");
+    expect(apiUrl, "https://update-api-url.com");
   });
 }
