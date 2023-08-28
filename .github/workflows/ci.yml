@@ -43,14 +43,13 @@ jobs:
         run: |
           ls 
       - name: Update config.json
-        env:
-          NEW_API_URL: "https://update-api-url.com"
+        # env:
           # NEW_API_URL: ${{ secrets.NEW_API_URL_SECRET }}
         run: |
           python3 -c '
           import json
 
-          new_api_url = "${NEW_API_URL}"
+          new_api_url = "https://update-api-url.com"
 
           with open("lib/config.json", "r+") as config_file:
               config_data = json.load(config_file)
