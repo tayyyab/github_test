@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,7 +33,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() async {
+    await load();
+    super.initState();
+  }
+
   int _counter = 0;
+  String? apiUrl;
+
+  load() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    final configString = await rootBundle.loadString('lib/config.json');
+    final config = json.decode(configString) as Map<String, dynamic>;
+    apiUrl = config['apiUrl'] as String;
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -49,6 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(
+              apiUrl ?? ' Not Loaded ',
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),

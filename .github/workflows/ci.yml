@@ -62,29 +62,43 @@ jobs:
       - run: flutter pub get
       - run: flutter test test/updated_config_test.dart
 
+  build_apk:
+    name: Build Apk 
+    needs: [flutter_test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: "11"
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - run: flutter pub get
+      - run: flutter clean
+      - name: Update config.json
+        # env:
+          # NEW_API_URL: ${{ secrets.NEW_API_URL_SECRET }}
+        run: |
+          python3 -c '
+          import json
 
-      
+          new_api_url = "https://update-api-url.com"
 
-  # build_apk:
-  #   name: Build Apk 
-  #   needs: [flutter_test]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-java@v2
-  #       with:
-  #         distribution: 'zulu'
-  #         java-version: "11"
-  #     - uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: "stable"
-  #     - run: flutter pub get
-  #     - run: flutter clean
-  #     - run: flutter build apk --debug --split-per-abi
+          with open("lib/config.json", "r+") as config_file:
+              config_data = json.load(config_file)
+              config_data["apiUrl"] = new_api_url
+              config_file.seek(0)
+              json.dump(config_data, config_file, indent=4)
+              config_file.truncate()
+          '
+        
+      - run: flutter build apk --debug --split-per-abi
 
-  #     - name: Push to Release
-  #       uses: ncipollo/release-action@v1
-  #       with:
-  #         artifacts: "build/app/outputs/apk/debug/*"
-  #         tag: v0.0.1
-  #         token: ${{ secrets.TOKEN }}
+      - name: Push to Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/debug/*"
+          tag: v0.0.2
+          token: ${{ secrets.TOKEN }}
