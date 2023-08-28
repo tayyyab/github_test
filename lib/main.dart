@@ -3,7 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+String? apiUrl;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final configString = await rootBundle.loadString('lib/config.json');
+  final config = json.decode(configString) as Map<String, dynamic>;
+  apiUrl = config['apiUrl'] as String;
   runApp(const MyApp());
 }
 
@@ -34,20 +40,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
-  void initState() async {
-    await load();
+  void initState() {
+    load();
     super.initState();
   }
 
   int _counter = 0;
-  String? apiUrl;
 
-  load() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final configString = await rootBundle.loadString('lib/config.json');
-    final config = json.decode(configString) as Map<String, dynamic>;
-    apiUrl = config['apiUrl'] as String;
-  }
+  load() async {}
 
   void _incrementCounter() {
     setState(() {
