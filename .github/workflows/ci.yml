@@ -19,7 +19,7 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter test test/widget_test.dart
-      - run: flutter test test/config.dart
+      - run: flutter test test/config_test.dart
 
   build:
     runs-on: ubuntu-latest
