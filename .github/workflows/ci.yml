@@ -38,6 +38,10 @@ jobs:
         with:
           channel: "stable"
 
+
+      - name: Debugging Step
+        run: |
+          ls 
       - name: Update config.json
         env:
           NEW_API_URL: "https://update-api-url.com"
