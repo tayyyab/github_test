@@ -52,7 +52,7 @@ jobs:
 
           new_api_url = "${NEW_API_URL}"
 
-          with open("github_test/lib/config.json", "r+") as config_file:
+          with open("lib/config.json", "r+") as config_file:
               config_data = json.load(config_file)
               config_data["apiUrl"] = new_api_url
               config_file.seek(0)
