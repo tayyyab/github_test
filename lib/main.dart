@@ -1,6 +1,15 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-void main() {
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+String? apiUrl;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final configString = await rootBundle.loadString('lib/config.json');
+  final config = json.decode(configString) as Map<String, dynamic>;
+  apiUrl = config['apiUrl'] as String;
   runApp(const MyApp());
 }
 
@@ -10,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My Demo App',
+      title: 'Test App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -30,7 +39,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    load();
+    super.initState();
+  }
+
   int _counter = 0;
+
+  load() async {}
 
   void _incrementCounter() {
     setState(() {
@@ -49,6 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(
+              apiUrl ?? ' Not Loaded ',
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
